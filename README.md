@@ -4,7 +4,7 @@
 
 CLI Cloze style quizes to help improve vocabulary in early language learning.
 
-### MVP
+### MVP [ Complete ]
 
 1. Produce random cloze
 2. Accept input
@@ -12,7 +12,7 @@ CLI Cloze style quizes to help improve vocabulary in early language learning.
 
 ### Structure
 
-- CLI UI
+- CLI UI, using Rich
 - FastAPI backend
 - PostgreSQL
 
@@ -37,8 +37,8 @@ ClozeEncounters/
 |   |--- schemas.py             # Database schema - Pydantic
 |   |--- models.py              # Structure format of data - SQLAlchemy
 |   |--- cloze_generation.py    # Cloze generation logic
-|- start_ce.py                  # Launch game
-|- .env                         # Secure variables
+|- clozeencounters.py           # Launch game
 |- seed_database.py             # Initial data
+|- .env                         # Secure variables
 |- README.md                    # You're lookin at it
 ```
