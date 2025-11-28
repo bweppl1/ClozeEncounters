@@ -5,6 +5,39 @@
 CLI Cloze style quizes to help improve vocabulary in early language learning.
 ![Picture of the CLI](https://github.com/bweppl1/ClozeEncounters/blob/main/assets/cli.png)
 
+## Problem
+
+Effective language learning happens through immersion in target language content. Early learning requires simple content. Often, this low levelcontent is only available in mediums which aren't interesting to adult learners (children's books & shows). When an early learner starts to lose motivation, and the tools they are using aren't interseting for them, they give up. Many early language learners quit after \_\_\_.
+
+## Solution
+
+The top **\_ words account for **% of spanish conversation. Attaining this milestone allows learners to immerse in diverse content that interests them, increasing goal adherence and improving the likelihood that a learner will successfully acquire their target language.
+
+ClozeEncounters combines **_Gamification_** and **_Spaced Repetition_** principles to help early language learners quickly and efficiently acquire the most common vocabulary.
+
+#### Gamification
+
+- Users are more likely to study if the tool feels like a game
+- Learning sessions are longer with gamification^1^ (Nicholson 2015, Dichev 2020)
+- Faster short term acquisition with streaks and xp bars^2^ (Lamb 2019, Dichev 2020)
+
+#### Spaced Repetition
+
+Spaced repetition is the use of repeat exposure to items, with intervals set just before the item leaves a learner's short term memory.
+
+ClozeEncounters uses FSRS (Free Spaced Repetition Scheudler). At a high level this algorithm uses 3 variables to determine repetition intervals:
+
+1. Difficulty - How inherently difficult an item is to understand (Simple vocabulary vs. vs complex tense \_\_\_\_)
+2. Stability - How long an item stays in memory before significant decay (Measured in days)
+3. Retrievability - The probability that an item can be recalled at any given time (Measured in percent)
+
+With **_FSRS_** a user can set their **Retrievability\***, esentially trading memory(+/-) for repetitions(+/-). The algorithm is "free" because it allows flexibility in learning habits. Older spaced repetition models were optimized for daily, single sessions. **_FSRS_** allows users to review more or less frequently and adapts as they do.
+
+To read more about FSRS visit:
+
+- <https://github.com/open-spaced-repetition/srs-benchmark?tab=readme-ov-file>
+- <https://github.com/open-spaced-repetition/fsrs-vs-sm17>
+
 ## Feature Focus
 
 Going to work on getting a baseline top 100 words, then get game modes for Top 10, 25, 50, 100 words. After that I'll work on implementing the spaced repetition system.

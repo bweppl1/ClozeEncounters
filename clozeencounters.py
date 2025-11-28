@@ -50,13 +50,13 @@ def generate_random_cloze(game_round, total_rounds):
         hidden_cloze = hidden_cloze[0].upper() + hidden_cloze[1:]
     # UI Cloze display
     print_panel(
-        f"\nSpanish: {hidden_cloze}\n\n" f"English: {english_translation}",
-        f"Question {game_round}/{total_rounds}\n",
+        f"\nSpanish: {hidden_cloze}\n\n" f"English: {english_translation}\n",
+        f"Question {game_round}/{total_rounds}",
         style="yellow",
     )
 
     # User answer
-    user_answer = Prompt.ask("\nYour answer")
+    user_answer = Prompt.ask("\nTu respuesta / Your answer")
 
     # Submit answer
     return check_answer(random_word, user_answer, random_cloze)
@@ -64,10 +64,14 @@ def generate_random_cloze(game_round, total_rounds):
 
 def check_answer(answer, guess, cloze):
     if normalize_string(guess) == normalize_string(answer):
-        print_panel(f"{cloze}", "Correct!", style="green")
+        print_panel(
+            f"{cloze}",
+            random.choice(["You're a genius!", "Yes! You're amazing!"]),
+            style="chartreuse1",
+        )
         return True
     else:
-        print_panel(f"{cloze}", "Wrong, idiot.", style="red")
+        print_panel(f"{cloze}", random.choice(["Wrong", "Haha.. no"]), style="red")
         return False
 
 
@@ -81,9 +85,9 @@ def start_game():
         "\nBienvenido a Cloze Encounters!\n\n"
         "Complete the Spanish sentence by filling in the blank!\n",
         "Cloze Encounters",
-        "red",
+        "purple",
     )
-    player_name = Prompt.ask("What is your name?")
+    player_name = Prompt.ask("Cual es tu nombre? / What is your name?")
     gaming = True
     while gaming:
         # If correct, increment points
@@ -98,10 +102,22 @@ def start_game():
             accuracy = (
                 player_points / game_round_limit
             ) * 100  # This logic will need to adjust if player exits early
+            # Calculating dynamic end game message based on performance, can remove later
+            if accuracy > 79 and accuracy < 100:
+                parting_words = f"Impressive performance {player_name}.. for a muggle."
+            elif accuracy > 50 and accuracy < 80:
+                parting_words = f"Well {player_name}, you're not a complete idiot."
+            elif accuracy > 0 and accuracy <= 50:
+                parting_words = f"{player_name}, the list of correct answers.. is about as long as your school bas was."
+            elif accuracy == 0:
+                parting_words = f"{player_name}, we calculate your score by dividing your points by your IQ... but that seems to have caused an error."
+            else:
+                parting_words = f"Esa fue una actuacion increible, {player_name}!"
+
             print_panel(
                 f"\nFinal score: {player_points}\n"
                 f"Accuracy: %{accuracy:.2f}\n\n"
-                f"You suck {player_name}.\n",
+                f"{parting_words}\n",
                 "Good Bye!",
                 style="purple",
             )
