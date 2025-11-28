@@ -6,7 +6,7 @@ CLI Cloze style quizes to help improve vocabulary in early language learning.
 
 ## Feature Focus
 
-Going to work on getting a baseline top 100 words, then get game modes for Top 10, 25, 50, 100 words. After that I'll work on implementing the spaced repitition system.
+Going to work on getting a baseline top 100 words, then get game modes for Top 10, 25, 50, 100 words. After that I'll work on implementing the spaced repetition system.
 
 ### MVP [ Complete ]
 
