@@ -3,7 +3,7 @@
 ## Summary
 
 CLI Cloze style quizes to help improve vocabulary in early language learning.
-![Picture of the CLI](http://`https://github.com/bweppl1/ClozeEncounters/assets/cli.png)
+![Picture of the CLI](https://github.com/bweppl1/ClozeEncounters/blob/main/assets/cli.png)
 
 ## Feature Focus
 
