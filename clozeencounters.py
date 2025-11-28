@@ -36,7 +36,7 @@ def print_panel(text: str, title: str = "TITLE MISSING", style: str = "blue"):
 # reg ex to hide word in the cloze
 def hide_word(cloze, word):
     pattern = rf"\b{re.escape(word)}\b"
-    return re.sub(pattern, "____", cloze, flags=re.IGNORECASE)
+    return re.sub(pattern, "____", normalize_string(cloze), flags=re.IGNORECASE)
 
 
 def generate_random_cloze(game_round, total_rounds):
@@ -45,13 +45,13 @@ def generate_random_cloze(game_round, total_rounds):
     random_cloze = random_cloze_data["spanish"]
     english_translation = random_cloze_data["english"]
     # hide word
-    hidden_cloze = hide_word(normalize_string(random_cloze), random_word)
+    hidden_cloze = hide_word(random_cloze, random_word)
     if hidden_cloze[0] != "_":
         hidden_cloze = hidden_cloze[0].upper() + hidden_cloze[1:]
     # UI Cloze display
     print_panel(
-        f"Spanish: {hidden_cloze}\n\n" f"English: {english_translation}",
-        f"Question {game_round}/{total_rounds}",
+        f"\nSpanish: {hidden_cloze}\n\n" f"English: {english_translation}",
+        f"Question {game_round}/{total_rounds}\n",
         style="yellow",
     )
 
@@ -78,8 +78,8 @@ def start_game():
     game_round = 1
     game_round_limit = 5
     print_panel(
-        "Bienvenido a Cloze Encounters!\n\n"
-        "Complete the Spanish sentence by filling in the blank!",
+        "\nBienvenido a Cloze Encounters!\n\n"
+        "Complete the Spanish sentence by filling in the blank!\n",
         "Cloze Encounters",
         "red",
     )

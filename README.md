@@ -16,15 +16,22 @@ CLI Cloze style quizes to help improve vocabulary in early language learning.
 - FastAPI backend
 - PostgreSQL
 
-### Unbuilt Features
+### Bugs
 
-1. Quiz groups (Top 10, 25, 50, 100 most common words)
-2. Point system
-3. Result tracking
-4. Quiz rounds (e.g. 10 questions, or timed)
-5. Implementing learning theory spaced repitition systems
-6. Rich Terminal Styling
-7. User progress
+[ ] Normalizing entire display sentence to account for accents
+[ ]
+[ ]
+[ ]
+
+### Features
+
+[ ] Quiz groups (Top 10, 25, 50, 100 most common words)
+[ ] Point system
+[ ] Result tracking
+[X] Quiz rounds (e.g. 10 questions, or timed)
+[ ] Implementing learning theory spaced repitition systems
+[X] Rich Terminal Styling
+[ ] User progress
 
 ### File Structure
 
