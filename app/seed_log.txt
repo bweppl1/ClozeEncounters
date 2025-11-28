@@ -1,0 +1,91 @@
+Traceback (most recent call last):
+  File "/home/brent/Documents/python/ClozeEncounters/app/seed_db.py", line 3, in <module>
+    from models import Word, Sentence, Base
+  File "/home/brent/Documents/python/ClozeEncounters/app/models.py", line 21, in <module>
+    class Sentence(Base):
+    ...<6 lines>...
+        word = relationship("Word", back_populates="sentences")
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/orm/decl_api.py", line 199, in __init__
+    _as_declarative(reg, cls, dict_)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+    return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+    return _ClassScanMapperConfig(
+        registry, cls_, dict_, table, mapper_kw
+    )
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/orm/decl_base.py", line 577, in __init__
+    self._setup_table(table)
+    ~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/orm/decl_base.py", line 1762, in _setup_table
+    table_cls(
+    ~~~~~~~~~^
+        tablename,
+        ^^^^^^^^^^
+    ...<3 lines>...
+        **table_kw,
+        ^^^^^^^^^^^
+    ),
+    ^
+  File "<string>", line 2, in __new__
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/util/deprecations.py", line 281, in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/sql/schema.py", line 429, in __new__
+    return cls._new(*args, **kw)
+           ~~~~~~~~^^^^^^^^^^^^^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/sql/schema.py", line 483, in _new
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/util/langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/sql/schema.py", line 479, in _new
+    table.__init__(name, metadata, *args, _no_init=False, **kw)  # type: ignore[misc] # noqa: E501
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/sql/schema.py", line 873, in __init__
+    self._init_items(
+    ~~~~~~~~~~~~~~~~^
+        *args,
+        ^^^^^^
+    ...<3 lines>...
+        all_names={},
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/sql/schema.py", line 233, in _init_items
+    spwd(self, **kw)
+    ~~~~^^^^^^^^^^^^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/sql/base.py", line 1348, in _set_parent_with_dispatch
+    self.dispatch.after_parent_attach(self, parent)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/event/attr.py", line 515, in __call__
+    fn(*args, **kw)
+    ~~^^^^^^^^^^^^^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/sql/schema.py", line 3280, in _set_table
+    self.constraint = ForeignKeyConstraint(
+                      ~~~~~~~~~~~~~~~~~~~~^
+        [],
+        ^^^
+    ...<9 lines>...
+        **self._unvalidated_dialect_kw,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/sql/schema.py", line 4697, in __init__
+    Constraint.__init__(
+    ~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<5 lines>...
+        **dialect_kw,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/sql/schema.py", line 4161, in __init__
+    self._validate_dialect_kwargs(dialect_kw)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/brent/Documents/python/ClozeEncounters/venv/lib/python3.14/site-packages/sqlalchemy/sql/base.py", line 611, in _validate_dialect_kwargs
+    raise TypeError(
+    ...<2 lines>...
+    )
+TypeError: Additional arguments should be named <dialectname>_<argument>, got 'nullable'

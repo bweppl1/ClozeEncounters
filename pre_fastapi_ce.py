@@ -3,8 +3,6 @@ import re
 import unicodedata
 import random
 from app.cloze_generation import get_random_cloze_data
-from app.database import engine
-from sqlalchemy.orm import Session
 
 # console styling
 from rich.console import Console
@@ -40,10 +38,9 @@ def hide_word(cloze, word):
 
 
 def generate_random_cloze(game_round, total_rounds):
-    random_cloze_data = get_random_cloze_data(Session(engine))
-    random_word = random_cloze_data["word"]
-    random_cloze = random_cloze_data["spanish"]
-    english_translation = random_cloze_data["english"]
+    random_word = random.choice(list(test_clozes))
+    random_choice = random.randint(0, 1)
+    random_cloze, english_translation = test_clozes[random_word][random_choice]
     # hide word
     hidden_cloze = hide_word(normalize_string(random_cloze), random_word)
     if hidden_cloze[0] != "_":
