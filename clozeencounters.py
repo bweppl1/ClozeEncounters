@@ -39,7 +39,7 @@ def hide_word(cloze, word):
     return re.sub(pattern, "____", normalize_string(cloze), flags=re.IGNORECASE)
 
 
-def generate_random_cloze(game_round, total_rounds):
+def generate_quiz_data(game_round, total_rounds):
     random_cloze_data = get_random_cloze_data(Session(engine))
     random_word = random_cloze_data["word"]
     random_cloze = random_cloze_data["spanish"]
@@ -91,7 +91,7 @@ def start_game():
     gaming = True
     while gaming:
         # If correct, increment points
-        earn_points = generate_random_cloze(game_round, game_round_limit)
+        earn_points = generate_quiz_data(game_round, game_round_limit)
         if earn_points:
             player_points += 1
         # Increment game round, will be used in 10 round game modes

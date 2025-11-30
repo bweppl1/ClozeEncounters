@@ -12,6 +12,7 @@ def get_random_cloze_data(db: Session) -> dict:
     sentence = random.choice(word.sentences)
 
     return {
+        "id": word.id,
         "word": word.word,
         "english": sentence.english,
         "spanish": sentence.spanish,
