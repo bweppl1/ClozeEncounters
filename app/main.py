@@ -1,4 +1,3 @@
-import random
 from sqlalchemy import func
 from fastapi import FastAPI, Depends, HTTPException  # HTTPEx. for error responses
 from sqlalchemy.orm import Session
@@ -46,17 +45,5 @@ def get_random_cloze(db: Session = Depends(get_db)):
     if not word or not word.sentences:
         raise HTTPException(404, "No words in database")
 
-    # Pick one random sentence pair
-    sentence = random.choice(word.sentences)
-
-    return {
-        "id": word.id,
-        "word": word.word,
-        "sentences": [
-            {
-                "id": sentence.id,
-                "spanish": sentence.spanish,
-                "english": sentence.english,
-            }
-        ],
-    }
+    # returning word.id, word.word, sentence.spanish, sentence.english
+    return word

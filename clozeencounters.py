@@ -41,6 +41,7 @@ def hide_word(cloze, word):
 
 def generate_quiz_data(game_round, total_rounds):
     random_cloze_data = get_random_cloze_data(Session(engine))
+    # print(f"test: {random_cloze_data}") - TEST PRINT
     random_word = random_cloze_data["word"]
     random_cloze = random_cloze_data["spanish"]
     english_translation = random_cloze_data["english"]

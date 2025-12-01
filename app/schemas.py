@@ -1,29 +1,11 @@
 # database schemes pydantic
 # validates user input for API requests/responses
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List, Dict
 
-
-# User model - implement later
-# class UserBase(BaseModel):
-#     name: str
-#
-#
-# class UserCreate(UserBase):
-#     word: Dict[str, List[List[str]]]
-#
-#
-# class UserResponse(UserBase):
-#     id: int
-#     words: Dict[str, List[List[str]]]
-#
-#     class Config:
-#         orm_mode = True
-#
-#
-
-
-# Sentence model
+####################
+#  Sentence model  #
+####################
 class SentenceBase(BaseModel):
     spanish: str
     english: str
@@ -34,26 +16,58 @@ class SentenceCreate(SentenceBase):
 
 
 class SentenceResponse(SentenceBase):
-    id: int
+    pass
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
-# Word model
+####################
+#    Word model    #
+####################
 class WordBase(BaseModel):
     word: str
 
 
 class WordCreate(WordBase):
-    word: str
     sentences: List[SentenceBase]
 
 
 class WordResponse(WordBase):
     id: int
-    word: str
-    sentences: List[SentenceBase]
+    sentences: List[SentenceResponse]
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
+
+
+####################
+#    User model    #
+####################
+class UserBase(BaseModel):
+    name: str
+    streak: int
+    experience: int
+    level: int
+
+
+class UserCreate(UserBase):
+    pass
+
+
+class UserResponse:
+    id: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+#######################
+#  User Words model   #
+#######################
+class UserWordBase(BaseModel):
+    user_id: int
+    word_id: int
+    word_score: int
+
+class UserWordCreate(UserWords):
+    pass
+
+class UserWordResponse(UserWordBase)
+
