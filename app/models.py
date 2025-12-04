@@ -1,13 +1,8 @@
 # data models - SQLAlcehmy
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 from app.database import Base
-
-# user model - implement in future
-# class User(Base):
-#     __tablename__ = "users"
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String, index=True)
 
 
 class Word(Base):
@@ -44,6 +39,6 @@ class UserWords(Base):
     id = Column(Integer, primary_key=True)
     word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    word_score = Column(Integer, default=50)
+    word_score = Column(ARRAY[Boolean])
 
     word = relationship("Word", back_populates="word_score")

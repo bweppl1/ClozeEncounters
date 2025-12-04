@@ -77,14 +77,14 @@ def seed():
         # Create the Word
         word = Word(word=word_text)
         db.add(word)
-        db.flush()  # gives the word an id immediately ** find more about this
+        db.flush()  # to generate ids; sends current data but doesn't commit
 
         # Create all sentences for this word
         for spanish, english in pairs:
             sentence = Sentence(
                 spanish=spanish,
                 english=english,
-                word_id=word.id,  # look up more about this connection with flush
+                word_id=word.id,
             )
             db.add(sentence)
             total_sentences += 1

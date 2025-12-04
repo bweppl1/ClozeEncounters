@@ -3,6 +3,7 @@
 from pydantic import BaseModel, ConfigDict
 from typing import List, Dict
 
+
 ####################
 #  Sentence model  #
 ####################
@@ -58,6 +59,7 @@ class UserResponse:
 
     model_config = ConfigDict(from_attributes=True)
 
+
 #######################
 #  User Words model   #
 #######################
@@ -66,8 +68,10 @@ class UserWordBase(BaseModel):
     word_id: int
     word_score: int
 
-class UserWordCreate(UserWords):
+
+class UserWordCreate(UserWordBase):
     pass
 
-class UserWordResponse(UserWordBase)
 
+class UserWordResponse(UserWordBase):
+    user_word_id: int

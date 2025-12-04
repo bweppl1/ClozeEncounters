@@ -22,6 +22,7 @@ def get_db():
 # GET, PUT, POST, DELETE
 
 
+# Creating a new word
 @app.post("/words/", response_model=schemas.WordResponse)
 def create_word(word: schemas.WordCreate, db: Session = Depends(get_db)):
     db_word = models.Word(word=word.word)
@@ -33,11 +34,7 @@ def create_word(word: schemas.WordCreate, db: Session = Depends(get_db)):
     return db_word
 
 
-# @app.get("/sentences/", response_model=schema.SentenceResponse)
-# def get_sentence(sentence: schemas.SentenceCreate, db: Session = Depends(get_db)):
-#     db_sentence =
-
-
+# Retrieving a random word
 @app.get("/random", response_model=schemas.WordResponse)
 def get_random_cloze(db: Session = Depends(get_db)):
     # Get random word
@@ -47,3 +44,21 @@ def get_random_cloze(db: Session = Depends(get_db)):
 
     # returning word.id, word.word, sentence.spanish, sentence.english
     return word
+
+
+# Updating a word score
+# Will have to decide whether to populate with default value, or add words as they are encountered
+@app.get("/user_words/", response_model=schemas.UserWordResponse)
+def get_word_score(word_score, word, user, db: Session = Depends(get_db)):
+    word_score_data = db.query(models.UserWords).(word=UserWords.word_id)
+    hit_interval = 0
+    if word_score[-1] == False:
+        hit_interval = 1
+    else:
+        attempts = len(word_score)
+        correct_attempts = 0
+        for attempt in word_score:
+            if attempt == True:
+                correct_attempts += 1
+        retrievability = (correct_attempts / attempts) * 100
+        print(f"TESTING -> retrievability: {retrievability}")
