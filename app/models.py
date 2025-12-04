@@ -39,6 +39,6 @@ class UserWords(Base):
     id = Column(Integer, primary_key=True)
     word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    word_score = Column(ARRAY[Boolean])
+    word_score = Column(ARRAY(Boolean))
 
     word = relationship("Word", back_populates="word_score")

@@ -1,6 +1,6 @@
 # seeding database with some test data
 from sqlalchemy.orm import Session
-from app.models import Word, Sentence, Base
+from app.models import Word, Sentence, Base, UserWords, User
 from app.database import engine
 
 # test data
@@ -69,6 +69,8 @@ def seed():
     # clear existing data
     db.query(Sentence).delete()
     db.query(Word).delete()
+    db.query(UserWords).delete()
+    db.query(User).delete()
     db.commit()
 
     total_sentences = 0

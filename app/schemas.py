@@ -66,7 +66,7 @@ class UserResponse:
 class UserWordBase(BaseModel):
     user_id: int
     word_id: int
-    word_score: int
+    word_score: List[bool]
 
 
 class UserWordCreate(UserWordBase):

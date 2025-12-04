@@ -3,6 +3,7 @@ import re
 import unicodedata
 import random
 from app.cloze_generation import get_random_cloze_data
+from app.user import get_user
 from app.database import engine
 from sqlalchemy.orm import Session
 
@@ -75,7 +76,6 @@ def check_answer(answer, guess, cloze):
         print_panel(f"{cloze}", random.choice(["Wrong", "Haha.. no"]), style="red")
         return False
 
-
 # Main game loop
 def start_game():
     # starting stats - eventually built into user table in PostgreSQL
@@ -89,6 +89,8 @@ def start_game():
         "purple",
     )
     player_name = Prompt.ask("Cual es tu nombre? / What is your name?")
+    # find or create user
+    get_user(player_name)
     gaming = True
     while gaming:
         # If correct, increment points
