@@ -10,7 +10,8 @@ from sqlalchemy.orm import Session
 # console styling
 from rich.console import Console
 from rich.panel import Panel
-from rich.text import Text
+
+# from rich.text import Text
 from rich.prompt import Prompt
 
 console = Console()
@@ -59,9 +60,11 @@ def generate_quiz_data(game_round, total_rounds):
 
     # User answer
     user_answer = Prompt.ask("\nTu respuesta / Your answer")
+    print(f"TESTING word id: {random_cloze_data['id']}")
 
     # Submit answer
-    return check_answer(random_word, user_answer, random_cloze)
+    is_correct = check_answer(random_word, user_answer, random_cloze)
+    return [is_correct, random_cloze_data["id"]]
 
 
 def check_answer(answer, guess, cloze):
@@ -75,6 +78,13 @@ def check_answer(answer, guess, cloze):
     else:
         print_panel(f"{cloze}", random.choice(["Wrong", "Haha.. no"]), style="red")
         return False
+
+
+# Updating user word score
+# Need to implement some kind of interval value
+def update_word_score(user, word, word_score):
+    pass
+
 
 # Main game loop
 def start_game():
@@ -90,13 +100,22 @@ def start_game():
     )
     player_name = Prompt.ask("Cual es tu nombre? / What is your name?")
     # find or create user
-    get_user(player_name)
+    user_data = get_user(player_name)
+    # contains:
+    # user_data.id
+    # user_data.name
     gaming = True
     while gaming:
         # If correct, increment points
-        earn_points = generate_quiz_data(game_round, game_round_limit)
-        if earn_points:
+        is_correct, word_id = generate_quiz_data(game_round, game_round_limit)
+        # update_word_score(word, user_data.id, word_score)
+        # Correct answer tasks
+        if is_correct:
             player_points += 1
+            update_word_score(user_data.id, word_id, is_correct)
+        # Incorrect answer tasks
+        else:
+            pass
         # Increment game round, will be used in 10 round game modes
         game_round += 1
         if game_round > game_round_limit:
