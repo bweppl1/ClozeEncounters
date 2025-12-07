@@ -1,9 +1,9 @@
 from sqlalchemy import func
 from fastapi import FastAPI, Depends, HTTPException  # HTTPEx. for error responses
 from sqlalchemy.orm import Session
-import models, schemas
-from database import SessionLocal, Base, engine
-from typing import Annotated 
+from app.database import SessionLocal, Base, engine
+from typing import Annotated
+import app.models as models, app.schemas as schemas
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -24,6 +24,7 @@ def get_db():
 
 # db dependency variable
 db_dependency = Annotated[Session, Depends(get_db)]
+
 
 # Creating a new word
 @app.post("/words/", response_model=schemas.WordResponse)
@@ -48,6 +49,7 @@ def get_random_cloze(db: db_dependency):
     # returning word.id, word.word, sentence.spanish, sentence.english
     return word
 
+
 # Create user
 @app.post("/user/", response_model=schemas.UserCreate)
 def create_user(user: schemas.UserCreate, db: db_dependency):
@@ -61,14 +63,16 @@ def create_user(user: schemas.UserCreate, db: db_dependency):
 # Create word score
 @app.post("/user_words/", response_model=schemas.UserWordCreate)
 def create_word_score(word_score: schemas.UserWordCreate, db: db_dependency):
-    db_word_score = models.UserWords(word_score=word_score.word_score,
-    word_id=word_score.word_id,
-    user_id=word_score.user_id)
+    db_word_score = models.UserWords(
+        word_score=word_score.word_score,
+        word_id=word_score.word_id,
+        user_id=word_score.user_id,
+    )
     db.add(db_word_score)
     db.commit()
     db.refresh(db_word_score)
     return db_word_score
-    
+
 
 # Retrieve word score
 # @app.get("/user_words/", response_model=schemas.UserWordResponse)
@@ -87,9 +91,7 @@ def create_word_score(word_score: schemas.UserWordCreate, db: db_dependency):
 #         print(f"TESTING -> retrievability: {retrievability}")
 #
 
-#get user
+# get user
 
 
-#update wordscore
-
-
+# update wordscore

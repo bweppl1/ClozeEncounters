@@ -1,7 +1,10 @@
 # seeding database with some test data
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from app.models import Word, Sentence, Base, UserWords, User
 from app.database import engine
+from fastapi import Depends
+from app.main import get_db
 
 # test data
 test_clozes = {
@@ -60,43 +63,61 @@ test_clozes = {
 }
 
 
+def reset_db(db=Depends(get_db)):
+    db.execute(
+        text(
+            """
+                TRUNCATE TABLE
+                    users,
+                    words,
+                    sentences,
+                    user_words
+                RESTART IDENTITY CASCADE
+                                   """
+        )
+    )
+    db.commit()
+
+
 def seed():
     # Create tables if they don't exist
     Base.metadata.create_all(bind=engine)
 
-    db = Session(engine)
+    with Session(engine) as db:
 
-    # clear existing data
-    db.query(Sentence).delete()
-    db.query(Word).delete()
-    db.query(UserWords).delete()
-    db.query(User).delete()
-    db.commit()
+        # clear existing data
+        reset_db(db)
 
-    total_sentences = 0
+        # db.query(Sentence).delete()
+        # db.query(Word).delete()
+        # db.query(UserWords).delete()
+        # db.query(User).delete()
+        # db.commit()
 
-    for word_text, pairs in test_clozes.items():
-        # Create the Word
-        word = Word(word=word_text)
-        db.add(word)
-        db.flush()  # to generate ids; sends current data but doesn't commit
+        total_sentences = 0
 
-        # Create all sentences for this word
-        for spanish, english in pairs:
-            sentence = Sentence(
-                spanish=spanish,
-                english=english,
-                word_id=word.id,
-            )
-            db.add(sentence)
-            total_sentences += 1
+        for word_text, pairs in test_clozes.items():
+            # Create the Word
+            word = Word(word=word_text)
+            db.add(word)
+            db.flush()  # to generate ids; sends current data but doesn't commit
 
-    db.commit()
-    db.close()
+            # Create all sentences for this word
+            for spanish, english in pairs:
+                sentence = Sentence(
+                    spanish=spanish,
+                    english=english,
+                    word_id=word.id,
+                )
+                db.add(sentence)
+                total_sentences += 1
 
-    print(
-        f"Successfully seeded {len(test_clozes)} words and {total_sentences} sentences!!!"
-    )
+        db.commit()
+        db.close()
+
+        print(
+            f"Successfully seeded {len(test_clozes)} words and {total_sentences} sentences!!!"
+        )
 
 
 if __name__ == "__main__":
