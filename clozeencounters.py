@@ -42,8 +42,8 @@ def hide_word(cloze, word):
     return re.sub(pattern, "____", normalize_string(cloze), flags=re.IGNORECASE)
 
 
-def generate_quiz_data(game_round, total_rounds):
-    random_cloze_data = get_random_cloze_data(Session(engine))
+def generate_quiz_data(game_round, total_rounds, game_word_category):
+    random_cloze_data = get_random_cloze_data(game_word_category, Session(engine))
     # print(f"test: {random_cloze_data}") - TEST PRINT
     random_word = random_cloze_data["word"]
     random_cloze = random_cloze_data["spanish"]
@@ -81,18 +81,11 @@ def check_answer(answer, guess, cloze):
         return False
 
 
-# Updating user word score
-# Need to implement some kind of interval value
-def update_word_score(user_id, word_id, word_score):
-    pass
-
-
 # Main game loop
 def start_game():
     # starting stats - eventually built into user table in PostgreSQL
     player_points = 0
     game_round = 1
-    game_round_limit = 5
     print_panel(
         "\nBienvenido a Cloze Encounters!\n\n"
         "Complete the Spanish sentence by filling in the blank!\n",
@@ -100,23 +93,38 @@ def start_game():
         "purple",
     )
     player_name = Prompt.ask("Cual es tu nombre? / What is your name?")
+    game_round_limit = int(Prompt.ask("How many rounds do you want to play?"))
+    category_options = [10, 50]
+    game_word_category = 0  # default setting
+    while game_word_category not in category_options:
+        game_word_category = int(
+            Prompt.ask("Choose game mode: 10 Common(10), 50 Common(50)")
+        )
+        if game_word_category not in category_options:
+            print(f"Must choose a valid option: {category_options}")
     # find or create user
-    user_data = get_user(player_name)
+    # user_data = get_user(player_name)
     # contains:
     # user_data.id
     # user_data.name
     gaming = True
     while gaming:
-        # If correct, increment points
-        is_correct, word_id = generate_quiz_data(game_round, game_round_limit)
+        is_correct, word_id = generate_quiz_data(
+            game_round, game_round_limit, game_word_category
+        )
+
         # get word score data
-        user_word_data = get_word_score(user_data.id, word_id)
-        print(f"User word data: {user_word_data.word_id}")
-        # update_word_score(word, user_data.id, word_score)
+        # user_word_data = get_word_score(user_data.id, word_id)
         # Correct answer tasks
         if is_correct:
             player_points += 1
-            update_word_score(user_data.id, word_id, is_correct)
+            # word_score on hold until I have a more clear structure
+            # update_word_score(
+            #     user_word_data.user_id,
+            #     user_word_data.word_id,
+            #     user_word_data.word_score,
+            #     is_correct,
+            # )
         # Incorrect answer tasks
         else:
             pass

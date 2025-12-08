@@ -19,3 +19,7 @@ def get_word_score(user_id, word_id):
         db.refresh(user_word)
 
     return user_word
+
+
+# On hold until I structure the scoring more clearly
+# def update_word_score(user, word, word_score, result)

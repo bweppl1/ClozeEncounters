@@ -4,8 +4,9 @@ from sqlalchemy.orm import Session
 from app.models import Word
 
 
-def get_random_cloze_data(db: Session) -> dict:
-    word = db.query(Word).order_by(func.random()).first()
+# implement word categories
+def get_random_cloze_data(max, db: Session) -> dict:
+    word = db.query(Word).filter(Word.id <= max).order_by(func.random()).first()
     if not word or not word.sentences:
         raise ValueError("Error pulling data from database.")
 

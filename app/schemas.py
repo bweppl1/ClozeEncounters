@@ -30,11 +30,11 @@ class WordBase(BaseModel):
 
 
 class WordCreate(WordBase):
+    category: List[str]
     sentences: List[SentenceBase]
 
 
 class WordResponse(WordBase):
-    id: int
     sentences: List[SentenceResponse]
 
     model_config = ConfigDict(from_attributes=True)
