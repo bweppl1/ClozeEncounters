@@ -1,7 +1,8 @@
 from app.database import SessionLocal
-from app.models import Word, User, UserWords
+from app.models import User
 
 db = SessionLocal()
+
 
 def get_user(user):
     user_found = db.query(User).filter(User.name == user).first()

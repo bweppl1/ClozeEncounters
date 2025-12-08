@@ -79,6 +79,13 @@ def reset_db(db=Depends(get_db)):
     db.commit()
 
 
+with engine.begin() as conn:
+    conn.execute(text("DROP TABLE IF EXISTS user_words CASCADE;"))
+
+Base.metadata.create_all(bind=engine)
+print("user_words table recreated with correct boolean[] column")
+
+
 def seed():
     # Create tables if they don't exist
     Base.metadata.create_all(bind=engine)

@@ -33,12 +33,17 @@ class User(Base):
     experience = Column(Integer, default=0)
     level = Column(Integer, default=0)
 
+    word_score = relationship("UserWords", back_populates="user")
+
 
 class UserWords(Base):
     __tablename__ = "user_words"
     id = Column(Integer, primary_key=True)
-    word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    word_score = Column(ARRAY(Boolean))
+    word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
+    word_score = Column(
+        ARRAY(Boolean), nullable=False, default=list, server_default="{}"
+    )
 
     word = relationship("Word", back_populates="word_score")
+    user = relationship("User", back_populates="word_score")

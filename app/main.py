@@ -60,18 +60,18 @@ def create_user(user: schemas.UserCreate, db: db_dependency):
     return db_user
 
 
-# Create word score
-@app.post("/user_words/", response_model=schemas.UserWordCreate)
-def create_word_score(word_score: schemas.UserWordCreate, db: db_dependency):
-    db_word_score = models.UserWords(
-        word_score=word_score.word_score,
-        word_id=word_score.word_id,
-        user_id=word_score.user_id,
-    )
-    db.add(db_word_score)
-    db.commit()
-    db.refresh(db_word_score)
-    return db_word_score
+# Create word score - unused...
+# @app.post("/user_words/", response_model=schemas.UserWordCreate)
+# def create_word_score(word_score: schemas.UserWordCreate, db: db_dependency):
+#     db_word_score = models.UserWords(
+#         word_score=word_score.word_score,
+#         word_id=word_score.word_id,
+#         user_id=word_score.user_id,
+#     )
+#     db.add(db_word_score)
+#     db.commit()
+#     db.refresh(db_word_score)
+#     return db_word_score
 
 
 # Retrieve word score

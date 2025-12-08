@@ -1,9 +1,5 @@
-from main import get_random_cloze
+mon_fri = (17 - 6) * 5
 
+nursing = (20 - 6) * 4
 
-def test_cloze():
-    cloze_data = get_random_cloze()
-    return cloze_data
-
-
-print(test_cloze())
+print(f"mon-fri {mon_fri} vs. nursing: {nursing}")

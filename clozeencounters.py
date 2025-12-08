@@ -5,6 +5,7 @@ import random
 from app.cloze_generation import get_random_cloze_data
 from app.user import get_user
 from app.database import engine
+from app.word_score import get_word_score
 from sqlalchemy.orm import Session
 
 # console styling
@@ -82,7 +83,7 @@ def check_answer(answer, guess, cloze):
 
 # Updating user word score
 # Need to implement some kind of interval value
-def update_word_score(user, word, word_score):
+def update_word_score(user_id, word_id, word_score):
     pass
 
 
@@ -108,6 +109,9 @@ def start_game():
     while gaming:
         # If correct, increment points
         is_correct, word_id = generate_quiz_data(game_round, game_round_limit)
+        # get word score data
+        user_word_data = get_word_score(user_data.id, word_id)
+        print(f"User word data: {user_word_data.word_id}")
         # update_word_score(word, user_data.id, word_score)
         # Correct answer tasks
         if is_correct:
