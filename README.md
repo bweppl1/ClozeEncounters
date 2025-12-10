@@ -66,6 +66,7 @@ Going to work on getting a baseline top 100 words, then get game modes for Top 1
 ### Bugs
 
 - [ ] Normalizing entire display sentence to account for accents
+- [ ] Some words aren't being hidden -> [tambien]
 
 ### Features
 

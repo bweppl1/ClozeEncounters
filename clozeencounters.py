@@ -65,7 +65,30 @@ def generate_quiz_data(game_round, total_rounds, game_word_category):
 
     # Submit answer
     is_correct = check_answer(random_word, user_answer, random_cloze)
-    return [is_correct, random_cloze_data["id"]]
+    return [
+        is_correct,
+        random_cloze_data["id"],
+        random_word,
+        random_cloze,
+        hidden_cloze,
+        english_translation,
+    ]
+
+
+def redo_question(word, spanish, hidden_cloze, english_translation):
+    print_panel(
+        f"\nSpanish: {hidden_cloze}\n\n" f"English: {english_translation}\n",
+        f"Failed Word Redo",
+        style="yellow",
+    )
+    # User answer
+    user_answer = Prompt.ask("\nTu respuesta / Your answer")
+
+    # Submit answer
+    is_correct = check_answer(word, user_answer, spanish)
+    return [
+        is_correct
+    ]  # May need to return word, word_id or more for point/word_score tracking
 
 
 def check_answer(answer, guess, cloze):
@@ -86,6 +109,7 @@ def start_game():
     # starting stats - eventually built into user table in PostgreSQL
     player_points = 0
     game_round = 1
+    redo_list = []  # will append quiz questions that the user fails
     print_panel(
         "\nBienvenido a Cloze Encounters!\n\n"
         "Complete the Spanish sentence by filling in the blank!\n",
@@ -94,11 +118,13 @@ def start_game():
     )
     player_name = Prompt.ask("Cual es tu nombre? / What is your name?")
     game_round_limit = int(Prompt.ask("How many rounds do you want to play?"))
-    category_options = [10, 50]
+    category_options = [10, 50, 100]
     game_word_category = 0  # default setting
     while game_word_category not in category_options:
         game_word_category = int(
-            Prompt.ask("Choose game mode: 10 Common(10), 50 Common(50)")
+            Prompt.ask(
+                "Choose game mode: 10 Common(10), 50 Common(50), 100 Common(100)"
+            )
         )
         if game_word_category not in category_options:
             print(f"Must choose a valid option: {category_options}")
@@ -109,8 +135,8 @@ def start_game():
     # user_data.name
     gaming = True
     while gaming:
-        is_correct, word_id = generate_quiz_data(
-            game_round, game_round_limit, game_word_category
+        is_correct, word_id, word, random_cloze, hidden_cloze, english_translation = (
+            generate_quiz_data(game_round, game_round_limit, game_word_category)
         )
 
         # get word score data
@@ -127,34 +153,21 @@ def start_game():
             # )
         # Incorrect answer tasks
         else:
-            pass
+            # add question to repeat list
+            redo_list.append([word, random_cloze, hidden_cloze, english_translation])
         # Increment game round, will be used in 10 round game modes
         game_round += 1
         if game_round > game_round_limit:
+            while len(redo_list) > 0:
+                for question in redo_list:
+                    word, random_cloze, hidden_cloze, engish_translation = question
+                    is_correct = redo_question(
+                        word, random_cloze, hidden_cloze, english_translation
+                    )
+                    # if user is right, remove from redo list
+                    if is_correct:
+                        redo_list.remove(question)
             gaming = False
-            # Good bye panel
-            accuracy = (
-                player_points / game_round_limit
-            ) * 100  # This logic will need to adjust if player exits early
-            # Calculating dynamic end game message based on performance, can remove later
-            if accuracy > 79 and accuracy < 100:
-                parting_words = f"Impressive performance {player_name}.. for a muggle."
-            elif accuracy > 50 and accuracy < 80:
-                parting_words = f"Well {player_name}, you're not a complete idiot."
-            elif accuracy > 0 and accuracy <= 50:
-                parting_words = f"{player_name}, the list of correct answers.. is about as long as your school bas was."
-            elif accuracy == 0:
-                parting_words = f"{player_name}, we calculate your score by dividing your points by your IQ... but that seems to have caused an error."
-            else:
-                parting_words = f"Esa fue una actuacion increible, {player_name}!"
-
-            print_panel(
-                f"\nFinal score: {player_points}\n"
-                f"Accuracy: %{accuracy:.2f}\n\n"
-                f"{parting_words}\n",
-                "Good Bye!",
-                style="purple",
-            )
 
 
 start_game()
