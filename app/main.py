@@ -51,13 +51,13 @@ def get_random_cloze(db: db_dependency):
 
 
 # Create user
-@app.post("/user/", response_model=schemas.UserCreate)
-def create_user(user: schemas.UserCreate, db: db_dependency):
-    db_user = models.User(name=user.name)
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+# @app.post("/user/", response_model=schemas.UserCreate)
+# def create_user(user: schemas.UserCreate, db: db_dependency):
+#     db_user = models.User(name=user.name)
+#     db.add(db_user)
+#     db.commit()
+#     db.refresh(db_user)
+#     return db_user
 
 
 # Create word score - unused...

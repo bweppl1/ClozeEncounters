@@ -43,35 +43,35 @@ class WordResponse(WordBase):
 ####################
 #    User model    #
 ####################
-class UserBase(BaseModel):
-    name: str
-    streak: int
-    experience: int
-    level: int
-
-
-class UserCreate(UserBase):
-    pass
-
-
-class UserResponse:
-    id: int
-
-    model_config = ConfigDict(from_attributes=True)
-
+# class UserBase(BaseModel):
+#     name: str
+#     streak: int
+#     experience: int
+#     level: int
+#
+#
+# class UserCreate(UserBase):
+#     pass
+#
+#
+# class UserResponse:
+#     id: int
+#
+#     model_config = ConfigDict(from_attributes=True)
+#
 
 #######################
 #  User Words model   #
 #######################
-class UserWordBase(BaseModel):
-    user_id: int
-    word_id: int
-    word_score: List[bool]
-
-
-class UserWordCreate(UserWordBase):
-    pass
-
-
-class UserWordResponse(UserWordBase):
-    user_word_id: int
+# class UserWordBase(BaseModel):
+#     user_id: int
+#     word_id: int
+#     word_score: List[bool]
+#
+#
+# class UserWordCreate(UserWordBase):
+#     pass
+#
+#
+# class UserWordResponse(UserWordBase):
+#     user_word_id: int

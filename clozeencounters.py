@@ -3,9 +3,11 @@ import re
 import unicodedata
 import random
 from app.cloze_generation import get_random_cloze_data
-from app.user import get_user
+
+# from app.user import get_user
 from app.database import engine
-from app.word_score import get_word_score
+
+# from app.word_score import get_word_score
 from sqlalchemy.orm import Session
 
 # console styling
@@ -86,9 +88,8 @@ def redo_question(word, spanish, hidden_cloze, english_translation):
 
     # Submit answer
     is_correct = check_answer(word, user_answer, spanish)
-    return [
-        is_correct
-    ]  # May need to return word, word_id or more for point/word_score tracking
+    return is_correct
+    # May need to return word, word_id or more for point/word_score tracking
 
 
 def check_answer(answer, guess, cloze):
@@ -128,46 +129,46 @@ def start_game():
         )
         if game_word_category not in category_options:
             print(f"Must choose a valid option: {category_options}")
-    # find or create user
-    # user_data = get_user(player_name)
-    # contains:
-    # user_data.id
-    # user_data.name
     gaming = True
     while gaming:
         is_correct, word_id, word, random_cloze, hidden_cloze, english_translation = (
             generate_quiz_data(game_round, game_round_limit, game_word_category)
         )
 
-        # get word score data
-        # user_word_data = get_word_score(user_data.id, word_id)
         # Correct answer tasks
         if is_correct:
             player_points += 1
-            # word_score on hold until I have a more clear structure
-            # update_word_score(
-            #     user_word_data.user_id,
-            #     user_word_data.word_id,
-            #     user_word_data.word_score,
-            #     is_correct,
-            # )
         # Incorrect answer tasks
         else:
             # add question to repeat list
             redo_list.append([word, random_cloze, hidden_cloze, english_translation])
-        # Increment game round, will be used in 10 round game modes
+            # DEBUG print(f"Redo Added: {redo_list[-1]}")
+        # Increment game round
         game_round += 1
         if game_round > game_round_limit:
             while len(redo_list) > 0:
                 for question in redo_list:
-                    word, random_cloze, hidden_cloze, engish_translation = question
+                    # breakdown question components to pass to the redo list
+                    word, random_cloze, hidden_cloze, english_translation = question
                     is_correct = redo_question(
                         word, random_cloze, hidden_cloze, english_translation
                     )
                     # if user is right, remove from redo list
                     if is_correct:
                         redo_list.remove(question)
-            gaming = False
+            gaming = False  # end game
+            game_end_screen(
+                player_name, player_points, game_round_limit
+            )  # display the end game screen
+
+
+def game_end_screen(player, points, rounds):
+    player_accuracy = int((points / rounds) * 100)
+    print_panel(
+        f"Points: {points} / {rounds}\n\nAccuracy: %{player_accuracy}\n\nWell done {player}!",
+        f"Game Over",
+        "purple",
+    )
 
 
 start_game()

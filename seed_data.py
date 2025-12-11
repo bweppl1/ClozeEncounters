@@ -183,7 +183,7 @@ test_clozes = {
     ],
     "tiene": [
         ["Mi hermana tiene dos gatos.", "My sister has two cats."],
-        ["¿Cuántos años tienes?", "How old are you?"],
+        ["Mi hermano tiene 20 años.", "My brother is 20 years old."],
     ],
     "hay": [
         ["Hay mucha gente en la playa.", "There are a lot of people on the beach."],
