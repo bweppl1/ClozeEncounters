@@ -41,7 +41,8 @@ def print_panel(text: str, title: str = "TITLE MISSING", style: str = "blue"):
 # reg ex to hide word in the cloze
 def hide_word(cloze, word):
     pattern = rf"\b{re.escape(word)}\b"
-    return re.sub(pattern, "____", normalize_string(cloze), flags=re.IGNORECASE)
+    # return re.sub(pattern, "____", normalize_string(cloze), flags=re.IGNORECASE)
+    return re.sub(pattern, "____", cloze, flags=re.IGNORECASE)
 
 
 def generate_quiz_data(game_round, total_rounds, game_word_category):
@@ -165,7 +166,7 @@ def start_game():
 def game_end_screen(player, points, rounds):
     player_accuracy = int((points / rounds) * 100)
     print_panel(
-        f"Points: {points} / {rounds}\n\nAccuracy: %{player_accuracy}\n\nWell done {player}!",
+        f"Points: {points} / {rounds}\n\nAccuracy: {player_accuracy}%\n\nWell done {player}!",
         f"Game Over",
         "purple",
     )

@@ -66,11 +66,11 @@ Going to work on getting a baseline top 100 words, then get game modes for Top 1
 ### Bugs
 
 - [ ] Normalizing entire display sentence to account for accents
-- [ ] Some words aren't being hidden -> [tambien, como, aqui(88), estas(75), esta(82)]
+- [ ] Some words aren't being hidden -> [tambien, como, aqui(88), estas(75), esta(82) que(51)] -> Testing fix
 
 ### Features
 
-- [ ] Quiz groups (Top 10, 25, 50, 100 most common words)
+- [x] Quiz groups (Top 10, 25, 50, 100 most common words)
 - [ ] Point system
 - [ ] Result tracking
 - [x] Quiz rounds (e.g. 10 questions, or timed)
