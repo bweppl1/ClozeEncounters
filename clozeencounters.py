@@ -82,7 +82,7 @@ def redo_question(word, spanish, hidden_cloze, english_translation):
     print_panel(
         f"\nSpanish: {hidden_cloze}\n\n" f"English: {english_translation}\n",
         f"Failed Word Redo",
-        style="yellow",
+        style="orange3",
     )
     # User answer
     user_answer = Prompt.ask("\nTu respuesta / Your answer")
