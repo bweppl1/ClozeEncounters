@@ -70,14 +70,12 @@ Going to work on getting a baseline top 100 words, then get game modes for Top 1
 
 ### Features
 
-- [x] Quiz groups (Top 10, 25, 50, 100 most common words)
+- [x] Quiz groups (Top 10, 50, 100 most common words)
 - [ ] Point system
-- [ ] Result tracking
 - [x] Quiz rounds (e.g. 10 questions, or timed)
-- [ ] Implementing learning theory spaced repitition systems
 - [x] Rich Terminal Styling
-- [ ] User progress
 - [x] PostgreSQL and FastAPI integration
+- [ ] System to eliminate duplication
 
 ### File Structure
 
@@ -91,7 +89,8 @@ ClozeEncounters/
 |   |--- models.py              # Structure format of data - SQLAlchemy
 |   |--- cloze_generation.py    # Cloze generation logic
 |- clozeencounters.py           # Launch game
-|- seed_db.py                   # Initial data
+|- seed_db.py                   # Creating DB
+|- seed_data.py                 # Seeding data
 |- requiremets.txt              # Program requirements
 |- README.md                    # You're lookin at it
 ```
