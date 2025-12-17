@@ -65,17 +65,16 @@ Going to work on getting a baseline top 100 words, then get game modes for Top 1
 
 ### Bugs
 
-- [ ] Normalizing entire display sentence to account for accents
-- [ ] Some words aren't being hidden -> [tambien, como, aqui(88), estas(75), esta(82) que(51)] -> Testing fix
+- [x] Normalizing entire display sentence to account for accents
+- [x] Some words aren't being hidden -> [tambien, como, aqui(88), estas(75), esta(82) que(51)] -> Testing fix
 
 ### Features
 
 - [x] Quiz groups (Top 10, 50, 100 most common words)
-- [ ] Point system
 - [x] Quiz rounds (e.g. 10 questions, or timed)
 - [x] Rich Terminal Styling
 - [x] PostgreSQL and FastAPI integration
-- [ ] System to eliminate duplication
+- [x] System to eliminate duplication
 
 ### File Structure
 

@@ -15,7 +15,7 @@ test_clozes = {
         ["El coche de mi padre es rojo.", "My father's car is red."],
     ],
     "que": [
-        ["No sé qué hora es.", "I don't know what time it is."],
+        ["Espero que tengas un buen día.", "I don't know what time it is."],
         ["Dice que vendrá mañana.", "He/she says that he/she will come tomorrow."],
     ],
     "y": [

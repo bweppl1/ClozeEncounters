@@ -45,9 +45,13 @@ def hide_word(cloze, word):
     return re.sub(pattern, "____", cloze, flags=re.IGNORECASE)
 
 
-def generate_quiz_data(game_round, total_rounds, game_word_category):
-    random_cloze_data = get_random_cloze_data(game_word_category, Session(engine))
+def generate_quiz_data(game_round, total_rounds, game_word_category, chosen_word_ids):
+    random_cloze_data = get_random_cloze_data(
+        game_word_category, chosen_word_ids, Session(engine)
+    )
+
     # print(f"test: {random_cloze_data}") - TEST PRINT
+    random_word_id = random_cloze_data["id"]
     random_word = random_cloze_data["word"]
     random_cloze = random_cloze_data["spanish"]
     english_translation = random_cloze_data["english"]
@@ -112,6 +116,7 @@ def start_game():
     player_points = 0
     game_round = 1
     redo_list = []  # will append quiz questions that the user fails
+    chosen_word_ids = []
     print_panel(
         "\nBienvenido a Cloze Encounters!\n\n"
         "Complete the Spanish sentence by filling in the blank!\n",
@@ -133,8 +138,12 @@ def start_game():
     gaming = True
     while gaming:
         is_correct, word_id, word, random_cloze, hidden_cloze, english_translation = (
-            generate_quiz_data(game_round, game_round_limit, game_word_category)
+            generate_quiz_data(
+                game_round, game_round_limit, game_word_category, chosen_word_ids
+            )
         )
+        # Add word.id to chosen list to avoid repeat appearances in the same round
+        chosen_word_ids.append(word_id)
 
         # Correct answer tasks
         if is_correct:

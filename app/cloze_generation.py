@@ -5,8 +5,14 @@ from app.models import Word
 
 
 # implement word categories
-def get_random_cloze_data(max, db: Session) -> dict:
-    word = db.query(Word).filter(Word.id <= max).order_by(func.random()).first()
+def get_random_cloze_data(max, chosen_word_ids, db: Session) -> dict:
+    word = (
+        db.query(Word)
+        .filter(Word.id <= max)
+        .filter(Word.id.notin_(chosen_word_ids))
+        .order_by(func.random())
+        .first()
+    )
     if not word or not word.sentences:
         raise ValueError("Error pulling data from database.")
 
