@@ -4,11 +4,23 @@ from sqlalchemy.orm import Session
 from app.database import SessionLocal, Base, engine
 from typing import Annotated
 import app.models as models, app.schemas as schemas
+from fastapi.middleware.cors import CORSMiddleware
+import random
+
 
 # Create tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# CORS - allowing communication with frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # React port may use 3000
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow HTTP methods
+    allow_headers=["*"],  # Allow headers
+)
 
 
 def get_db():
@@ -39,7 +51,7 @@ def create_word(word: schemas.WordCreate, db: db_dependency):
 
 
 # Retrieving a random word
-@app.get("/random", response_model=schemas.WordResponse)
+@app.get("/random_cloze", response_model=schemas.WordResponse)
 def get_random_cloze(db: db_dependency):
     # Get random word
     word = db.query(models.Word).order_by(func.random()).first()
@@ -50,6 +62,26 @@ def get_random_cloze(db: db_dependency):
     return word
 
 
+# @app.get("/random_cloze", response_model=schemas.)
+# def get_random_cloze_data(max, chosen_word_ids, db: Session) -> dict:
+#     word = (
+#         db.query(Word)
+#         .filter(Word.id <= max)
+#         .filter(Word.id.notin_(chosen_word_ids))
+#         .order_by(func.random())
+#         .first()
+#     )
+#     if not word or not word.sentences:
+#         raise ValueError("Error pulling data from database.")
+#
+#     sentence = random.choice(word.sentences)
+#
+#     return {
+#         "id": word.id,
+#         "word": word.word,
+#         "english": sentence.english,
+#         "spanish": sentence.spanish,
+#     }
 # Create user
 # @app.post("/user/", response_model=schemas.UserCreate)
 # def create_user(user: schemas.UserCreate, db: db_dependency):
