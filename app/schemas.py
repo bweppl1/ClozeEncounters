@@ -39,6 +39,13 @@ class WordResponse(WordBase):
 
     model_config = ConfigDict(from_attributes=True)
 
+class ClozeResponse(BaseModel):
+    word_id: int
+    word: str
+    answer: str
+    cloze: str
+    spanish: str
+    english: str
 
 ####################
 #    User model    #

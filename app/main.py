@@ -1,4 +1,6 @@
 from sqlalchemy import func
+import re
+import unicodedata
 from fastapi import FastAPI, Depends, HTTPException  # HTTPEx. for error responses
 from sqlalchemy.orm import Session
 from app.database import SessionLocal, Base, engine
@@ -49,81 +51,45 @@ def create_word(word: schemas.WordCreate, db: db_dependency):
     db.refresh(db_word)
     return db_word
 
+# Clean accts
+def normalize_string(answer):
+    no_accents = "".join(
+        c
+        for c in unicodedata.normalize("NFD", answer)
+        if unicodedata.category(c) != "Mn"
+    )
+    return no_accents.lower().strip()
 
-# Retrieving a random word
-@app.get("/random_cloze", response_model=schemas.WordResponse)
-def get_random_cloze(db: db_dependency):
+
+# reg ex to hide word in the cloze
+def hide_word(cloze, word):
+    pattern = rf"\b{re.escape(word)}\b"
+    return re.sub(pattern, "____", cloze, flags=re.IGNORECASE)
+
+@app.get("/random_cloze", response_model=schemas.ClozeResponse)
+def get_random_cloze_endpoint(db: Session = Depends(get_db)):
+    """Get a completely random word with its sentence for cloze exercise"""
+    
     # Get random word
     word = db.query(models.Word).order_by(func.random()).first()
     if not word or not word.sentences:
-        raise HTTPException(404, "No words in database")
+        raise HTTPException(status_code=404, detail="No words with sentences found")
+    
+    # Pick a random sentence from this word
+    sentence = random.choice(word.sentences)
+    
+    # Create cloze
+    hidden_cloze = hide_word(sentence.spanish, word.word)
+    if hidden_cloze and hidden_cloze[0] != "_":
+        hidden_cloze = hidden_cloze[0].upper() + hidden_cloze[1:]
 
-    # returning word.id, word.word, sentence.spanish, sentence.english
-    return word
-
-
-# @app.get("/random_cloze", response_model=schemas.)
-# def get_random_cloze_data(max, chosen_word_ids, db: Session) -> dict:
-#     word = (
-#         db.query(Word)
-#         .filter(Word.id <= max)
-#         .filter(Word.id.notin_(chosen_word_ids))
-#         .order_by(func.random())
-#         .first()
-#     )
-#     if not word or not word.sentences:
-#         raise ValueError("Error pulling data from database.")
-#
-#     sentence = random.choice(word.sentences)
-#
-#     return {
-#         "id": word.id,
-#         "word": word.word,
-#         "english": sentence.english,
-#         "spanish": sentence.spanish,
-#     }
-# Create user
-# @app.post("/user/", response_model=schemas.UserCreate)
-# def create_user(user: schemas.UserCreate, db: db_dependency):
-#     db_user = models.User(name=user.name)
-#     db.add(db_user)
-#     db.commit()
-#     db.refresh(db_user)
-#     return db_user
-
-
-# Create word score - unused...
-# @app.post("/user_words/", response_model=schemas.UserWordCreate)
-# def create_word_score(word_score: schemas.UserWordCreate, db: db_dependency):
-#     db_word_score = models.UserWords(
-#         word_score=word_score.word_score,
-#         word_id=word_score.word_id,
-#         user_id=word_score.user_id,
-#     )
-#     db.add(db_word_score)
-#     db.commit()
-#     db.refresh(db_word_score)
-#     return db_word_score
-
-
-# Retrieve word score
-# @app.get("/user_words/", response_model=schemas.UserWordResponse)
-# def get_word_score(word_score: schemas.UserWordsBase, word, user, db: db_dependency):
-#     word_score_data = db.query(models.UserWords).(word=UserWords.word_id)
-#     hit_interval = 0
-#     if word_score[-1] == False:
-#         hit_interval = 1
-#     else:
-#         attempts = len(word_score)
-#         correct_attempts = 0
-#         for attempt in word_score:
-#             if attempt == True:
-#                 correct_attempts += 1
-#         retrievability = (correct_attempts / attempts) * 100
-#         print(f"TESTING -> retrievability: {retrievability}")
-#
-
-# get user
-
-
-# update wordscore
+    answer = normalize_string(word.word)
+    
+    return {
+        "word_id": word.id,
+        "word": word.word,
+        "answer": answer,
+        "cloze": hidden_cloze,
+        "spanish": sentence.spanish,
+        "english": sentence.english
+    }
