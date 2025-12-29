@@ -24,16 +24,13 @@ class Sentence(Base):
     word = relationship("Word", back_populates="sentences")
 
 
-# class User(Base):
-#     __tablename__ = "users"
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String, nullable=False)
-#     password = Column(String, default="password")
-#     streak = Column(Integer, default=0)
-#     experience = Column(Integer, default=0)
-#     level = Column(Integer, default=0)
-#
-#     word_score = relationship("UserWords", back_populates="user")
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, nullable=False, unique=True, index=True)
+    hashed_password = Column(String)
+
+    # word_score = relationship("UserWords", back_populates="user")
 
 
 # class UserWords(Base):

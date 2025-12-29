@@ -47,25 +47,24 @@ class ClozeResponse(BaseModel):
     spanish: str
     english: str
 
-####################
-#    User model    #
-####################
-# class UserBase(BaseModel):
-#     name: str
-#     streak: int
-#     experience: int
-#     level: int
-#
-#
-# class UserCreate(UserBase):
-#     pass
-#
-#
-# class UserResponse:
-#     id: int
-#
-#     model_config = ConfigDict(from_attributes=True)
-#
+###################
+#   User model    #
+###################
+class UserBase(BaseModel):
+    email: str
+    password: str
+    streak: int
+
+
+class UserCreate(UserBase):
+    pass
+
+
+class UserResponse(UserBase):
+    id: int
+
+    model_config = ConfigDict(from_attributes=True)
+
 
 #######################
 #  User Words model   #
