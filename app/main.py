@@ -57,6 +57,13 @@ def create_word(word: schemas.WordCreate, db: db_dependency):
     return db_word
 
 
+# Fetching all words
+@app.get("/words/", response_model=schemas.WordResponse)
+def get_all_words(db: db_dependency):
+    word = db.query(models.Word)
+    return {"word_id": word.id, "word": word.word}
+
+
 # Clean accts
 def normalize_string(answer):
     no_accents = "".join(
