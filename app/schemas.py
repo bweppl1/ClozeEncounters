@@ -39,6 +39,7 @@ class WordResponse(WordBase):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class ClozeResponse(BaseModel):
     word_id: int
     word: str
@@ -46,6 +47,7 @@ class ClozeResponse(BaseModel):
     cloze: str
     spanish: str
     english: str
+
 
 ###################
 #   User model    #
@@ -64,6 +66,10 @@ class UserResponse(UserBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class UserLogin(UserBase):
+    pass
 
 
 #######################

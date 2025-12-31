@@ -20,22 +20,24 @@ from rich.prompt import Prompt
 console = Console()
 
 
+# Rich message
+def print_message(text: str, style: str = "white"):
+    console.print(text, style=style)
+
+
+# Rich panel
+def print_panel(text: str, title: str = "TITLE MISSING", style: str = "blue"):
+    console.print(Panel(text, title=title, style=style))
+
+
+# Normalize unicode → removes accents (á → a, ñ → n, etc.)
 def normalize_string(answer):
-    # Normalize unicode → removes accents (á → a, ñ → n, etc.)
     no_accents = "".join(
         c
         for c in unicodedata.normalize("NFD", answer)
         if unicodedata.category(c) != "Mn"
     )
     return no_accents.lower().strip()
-
-
-def print_message(text: str, style: str = "white"):
-    console.print(text, style=style)
-
-
-def print_panel(text: str, title: str = "TITLE MISSING", style: str = "blue"):
-    console.print(Panel(text, title=title, style=style))
 
 
 # reg ex to hide word in the cloze
@@ -51,7 +53,7 @@ def generate_quiz_data(game_round, total_rounds, game_word_category, chosen_word
     )
 
     # print(f"test: {random_cloze_data}") - TEST PRINT
-    random_word_id = random_cloze_data["id"]
+    # random_word_id = random_cloze_data["id"]  # may use for word score join table
     random_word = random_cloze_data["word"]
     random_cloze = random_cloze_data["spanish"]
     english_translation = random_cloze_data["english"]

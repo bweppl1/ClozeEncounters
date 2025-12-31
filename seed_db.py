@@ -14,7 +14,8 @@ def reset_db(db=Depends(get_db)):
             """
                 TRUNCATE TABLE
                     words,
-                    sentences
+                    sentences,
+                    users
                 RESTART IDENTITY CASCADE
                                    """
         )
