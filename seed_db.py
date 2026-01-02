@@ -4,7 +4,7 @@ from sqlalchemy import text
 from app.models import Word, Sentence, Base
 from app.database import engine
 from fastapi import Depends
-from app.main import get_db
+from app.database import get_db
 from seed_data import test_clozes
 
 

@@ -1,6 +1,6 @@
 # database schemes pydantic
 # validates user input for API requests/responses
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, validator
 from typing import List, Dict
 
 
@@ -54,7 +54,7 @@ class ClozeResponse(BaseModel):
 ###################
 class UserBase(BaseModel):
     email: str
-    password: str
+    hashed_password: str
     streak: int
 
 
@@ -71,6 +71,16 @@ class UserResponse(UserBase):
 class UserLogin(UserBase):
     pass
 
+##################
+#  Token models  #
+##################
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: str
 
 #######################
 #  User Words model   #

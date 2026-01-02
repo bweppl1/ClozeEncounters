@@ -1,19 +1,25 @@
-# database connection
-import os
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import MetaData, create_engine
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://postgres:qpzm@localhost:5432/clozeencounters"
-)
-# connect to PostgreSQL
-engine = create_engine(
-    DATABASE_URL, echo=False
-)  # echo=True for terminal output for PostgreSQL queries
+from .core.config import DATABASE_URL
+from .models import Base
 
-# session factory using the engine
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+metadata = MetaData()
 
-# base parent model for ORMs
-Base = declarative_base()
+
+def get_db():
+    """Database session dependency.
+
+    Yields:
+        Session: A SQLAlchemy database session
+    """
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+Base.metadata.create_all(bind=engine)
