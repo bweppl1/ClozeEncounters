@@ -17,6 +17,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 router = APIRouter()
 
+
 def verify_password(plain_password, hashed_password):
     """Verify a password against its hash.
 
@@ -42,32 +43,32 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(db: Session, username: str):
-    """Retrieve a user by username from the database.
+def get_user(db: Session, email: str):
+    """Retrieve a user by email from the database.
 
     Args:
         db: The database session
-        username: The username to search for
+        email: The email to search for
 
     Returns:
         User: The user object if found, None otherwise
     """
-    db_user = db.query(User).filter(User.username == username).first()
+    db_user = db.query(User).filter(User.email == email).first()
     return db_user
 
 
-def authenticate_user(db: Session, username: str, password: str):
-    """Authenticate a user by verifying their username and password.
+def authenticate_user(db: Session, email: str, password: str):
+    """Authenticate a user by verifying their email and password.
 
     Args:
         db: The database session
-        username: The username to authenticate
+        email: The email to authenticate
         password: The password to verify
 
     Returns:
         User: The authenticated user object if successful, False otherwise
     """
-    user = get_user(db, username)
+    user = get_user(db, email)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -95,7 +96,9 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def get_current_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
     """Validate an access token and return the current user.
 
     Args:
@@ -115,14 +118,14 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("sub")
+        if email is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = TokenData(email=email)
     except InvalidTokenError as e:
         raise credentials_exception from e
 
-    user = db.query(User).filter(User.username == token_data.username).first()
+    user = db.query(User).filter(User.email == token_data.email).first()
     if user is None:
         raise credentials_exception
     return user

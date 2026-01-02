@@ -1,4 +1,4 @@
-from decouple import config
+from decouple import config, Csv
 
 # Security settings
 SECRET_KEY = config("SECRET_KEY")
@@ -11,6 +11,6 @@ DATABASE_URL = config(
 )
 
 # API settings
-CORS_ORIGINS = config("CORS_ORIGINS", default="http://localhost:5173,http://localhost:8000").split(
-    ","
+CORS_ORIGINS = config(
+    "CORS_ORIGINS", default="http://localhost:5173,http://localhost:8000", cast=Csv()
 )
