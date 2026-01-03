@@ -52,25 +52,22 @@ class ClozeResponse(BaseModel):
 ###################
 #   User model    #
 ###################
-class UserBase(BaseModel):
+class UserCreate(BaseModel):
     email: str
-    hashed_password: str
-    streak: int
+    password: str
 
-
-class UserCreate(UserBase):
+class UserLogin(UserCreate):
     pass
 
-
-class UserResponse(UserBase):
+class UserResponse(BaseModel):
     id: int
+    email: str
 
     model_config = ConfigDict(from_attributes=True)
 
-
-class UserLogin(UserBase):
-    pass
-
+class LoginResponse(BaseModel):
+    user_data: UserResponse
+    token: str
 
 ##################
 #  Token models  #

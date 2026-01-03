@@ -4,7 +4,8 @@ import jwt
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
-from passlib.context import CryptContext
+# from passlib.context import CryptContext   # attempting modern approach importing bcrypt
+import bcrypt
 from sqlalchemy.orm import Session
 
 from ..core.config import ALGORITHM, SECRET_KEY
@@ -12,7 +13,7 @@ from ..database import get_db
 from ..models import User
 from ..schemas import TokenData
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 router = APIRouter()
@@ -28,8 +29,8 @@ def verify_password(plain_password, hashed_password):
     Returns:
         bool: True if the password matches the hash, False otherwise
     """
-    return pwd_context.verify(plain_password, hashed_password)
-
+    # return pwd_context.verify(plain_password, hashed_password)
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 def get_password_hash(password):
     """Hash a password for secure storage.
@@ -40,7 +41,9 @@ def get_password_hash(password):
     Returns:
         str: The hashed password
     """
-    return pwd_context.hash(password)
+    print(f"hashing pw: {password}")
+    # return pwd_context.hash(password)
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 
 def get_user(db: Session, email: str):

@@ -24,7 +24,8 @@ def reset_db(db=Depends(get_db)):
 
 
 with engine.begin() as conn:
-    conn.execute(text("DROP TABLE IF EXISTS user_words CASCADE;"))
+    # conn.execute(text("DROP TABLE IF EXISTS user_words CASCADE;"))
+    conn.execute(text("DROP TABLE IF EXISTS users CASCADE;"))
 
 # Used after user_words originally created to contain an int .. may reuse
 # Base.metadata.create_all(bind=engine)

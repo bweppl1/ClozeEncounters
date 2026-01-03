@@ -13,12 +13,12 @@ from ..auth.auth_handler import (
 from ..core.config import ACCESS_TOKEN_EXPIRE_MINUTES
 from ..database import get_db
 from ..models import User
-from ..schemas import Token, UserCreate, UserResponse
+from ..schemas import LoginResponse, UserCreate, UserLogin, Token
 
 router = APIRouter()
 
 
-@router.post("/register", response_model=UserResponse)
+@router.post("/register", response_model=LoginResponse)
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
     """Register a new user in the system.
 
@@ -35,31 +35,22 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = get_user(db, user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered.")
-    hashed_password = get_password_hash(user.hashed_password)
+    hashed_password = get_password_hash(user.password)
     db_user = User(email=user.email, hashed_password=hashed_password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    return db_user
 
+    print(f"DEBUG user id: {db_user.id}")
 
-@router.post("/token")
-async def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
-) -> Token:
-    """Authenticate a user and return an access token.
+    # create token
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(data={"sub": db_user.email}, expires_delta=access_token_expires)
+    return({"user_data":db_user, "token":access_token})
 
-    Parameters:
-        form_data: The OAuth2 password request form containing email and password
-        db: Database session dependency
-
-    Returns:
-        Token: An object containing the access token and token type
-
-    Raises:
-        HTTPException: If authentication fails
-    """
-    user = authenticate_user(db, form_data.email, form_data.password)
+@router.post("/login", response_model=LoginResponse)
+async def login(user: UserLogin, db: Session = Depends(get_db)):
+    user = authenticate_user(db, user.email, user.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -70,4 +61,4 @@ async def login_for_access_token(
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
-    return Token(access_token=access_token, token_type="bearer")
+    return({"user_data":user, "token":access_token})
