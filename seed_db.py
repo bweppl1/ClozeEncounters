@@ -23,9 +23,10 @@ def reset_db(db=Depends(get_db)):
     db.commit()
 
 
-with engine.begin() as conn:
+# !!CLEAR PostgreSQL table schema when redesigning with this:
+# with engine.begin() as conn:
     # conn.execute(text("DROP TABLE IF EXISTS user_words CASCADE;"))
-    conn.execute(text("DROP TABLE IF EXISTS users CASCADE;"))
+    # conn.execute(text("DROP TABLE IF EXISTS users CASCADE;"))
 
 # Used after user_words originally created to contain an int .. may reuse
 # Base.metadata.create_all(bind=engine)

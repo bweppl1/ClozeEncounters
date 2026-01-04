@@ -19,58 +19,24 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 router = APIRouter()
 
 
-def verify_password(plain_password, hashed_password):
-    """Verify a password against its hash.
-
-    Args:
-        plain_password: The password in plain text
-        hashed_password: The hashed password to compare against
-
-    Returns:
-        bool: True if the password matches the hash, False otherwise
-    """
-    # return pwd_context.verify(plain_password, hashed_password)
+# checking plain password vs hashed
+def verify_password(plain_password, hashed_password) -> bool:
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
+# hashing the plain password
 def get_password_hash(password):
-    """Hash a password for secure storage.
-
-    Args:
-        password: The password to hash
-
-    Returns:
-        str: The hashed password
-    """
-    print(f"hashing pw: {password}")
-    # return pwd_context.hash(password)
+    # print(f"DEBUG hashing pw: {password}")
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 
+# search for user by email
 def get_user(db: Session, email: str):
-    """Retrieve a user by email from the database.
-
-    Args:
-        db: The database session
-        email: The email to search for
-
-    Returns:
-        User: The user object if found, None otherwise
-    """
     db_user = db.query(User).filter(User.email == email).first()
     return db_user
 
 
+# self explanatory in my opinion, but it bothers me if I don't comment a function
 def authenticate_user(db: Session, email: str, password: str):
-    """Authenticate a user by verifying their email and password.
-
-    Args:
-        db: The database session
-        email: The email to authenticate
-        password: The password to verify
-
-    Returns:
-        User: The authenticated user object if successful, False otherwise
-    """
     user = get_user(db, email)
     if not user:
         return False
@@ -132,15 +98,3 @@ async def get_current_user(
     if user is None:
         raise credentials_exception
     return user
-
-
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
-    """Return the current active user.
-
-    Args:
-        current_user: The current authenticated user
-
-    Returns:
-        User: The current authenticated user
-    """
-    return current_user

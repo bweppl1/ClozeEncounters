@@ -49,7 +49,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     return({"user_data":db_user, "token":access_token})
 
 @router.post("/login", response_model=LoginResponse)
-async def login(user: UserLogin, db: Session = Depends(get_db)):
+async def login(user: UserLogin, db: Session = Depends(get_db))
     user = authenticate_user(db, user.email, user.password)
     if not user:
         raise HTTPException(
